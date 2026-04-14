@@ -18,9 +18,9 @@ public:
 
 private:
     std::string address_;
-    int port_;
-    int server_fd_;
-    bool running_;
+    int port_; // port number
+    int server_fd_; // server socket file descriptor
+    bool running_; // flag to control server loop
 
     std::vector<std::thread> client_threads_;
 

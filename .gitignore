@@ -1,1 +1,8 @@
 more_details.tcl
+amikon_server_x86_linux
+# Ignore build artifacts
+/build/
+/bin/
+/obj/
+/Debug/
+/Release/
