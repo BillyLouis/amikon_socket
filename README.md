@@ -85,47 +85,109 @@ As shown in the 2 images below:
 
 ## ##############################################
 ### Client Folder:
-...  
-...  
-...  
-TBD  
-...  
-...  
-
-
-
-
-### GTK+/OpenGL GUI (Client):
-...  
-...  
-...  
-TBD  
-...  
-...  
-
-## ##############################################
-##### Lessons Learned:
-1- Difference between headers <arpa/inet.h> and <netinet/in.h>
 ```shell
-These two headers are related but serve different purposes:
+### Compile and running the client side:
+- Open a terminal while in $(HOME)/client/
+- Run the command: 
+$ g++ -std=c++14 main.cpp amikon_client.cpp -o amikon_client_x86_linux 
+$ ./amikon_client_x86_linux 127.0.0.1 5000
 
-<netinet/in.h>
-Defines constants, structures, and macros for the Internet domain.
-Examples:
-struct sockaddr_in
-INADDR_ANY
-IPPROTO_TCP, IPPROTO_UDP
-AF_INET, AF_INET6
-- This is included when you need to define socket address structures.
+### Test end‑to‑end
+# Terminal 1:
+$ cd server
+./amikon_server_x86_linux 
 
-<arpa/inet.h>
-Declares functions for manipulating IP addresses in text/binary form.
-Examples:
-inet_pton() -> Convert text to binary IP
-inet_ntop() -> Convert binary IP to text
-inet_addr() (legacy)
-- This is included when you need to convert or format IP addresses which is not needed in our case
+# Terminal 2:
+$ cd client
+./amikon_client_x86_linux
+
+
+### Expected output:
+    # Client server:
+    [CLIENT] Connected to server
+    [CLIENT] Server Response:
+    <response><status>OK</status></response>
+
+    # Sever side:
+    [SERVER] Client connected
+    [SERVER] Received:
+    <?xml version='1.0' encoding='UTF-8'?><request>...
+    [SERVER] XML queued for processing
+
+### Expected Ouput is shown in the 2 images below:
 ```
+![alt text](images/CaptureServerTest2.PNG)
+
+
+
+
+## ###############################################
+### GTK+ GUI 
+```shell
+This part is to make thinkgs look nicer and easier to operate for user with no counsole ability.
+- ISSUE TO FIX [WSL (windows10) environment]:
+    [1] Install all required Linux packages inside WSL Ubuntu
+    [2] Install VcXsrv on Windows 10 since GTK apps need an X server to display windows.
+        https://sourceforge.net/projects/vcxsrv/
+    [3] Configure WSL to use VcXsrv
+    [4] Test that GTK works: $sudo apt install -y x11-apps
+                             $xeyes
+    -Test file - 
+    $ sudo nano test_gtk.cpp
+        #include <gtk/gtk.h>
+        int main(int argc, char **argv) {
+            gtk_init(&argc, &argv);
+            GtkWidget *w = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+            gtk_window_set_title(GTK_WINDOW(w), "GTK Test");
+            gtk_widget_show_all(w);
+            g_signal_connect(w, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+            gtk_main();
+            return 0;
+        }
+    - Compile & run -
+    $ g++ test_gtk.cpp -o test_gtk $(pkg-config --cflags --libs gtk+-3.0)
+    $ ./test_gtk
+
+
+- Lessons Learned:
+Difference between headers <arpa/inet.h> and <netinet/in.h>
+    These two headers are related but serve different purposes:
+
+    <netinet/in.h>
+    Defines constants, structures, and macros for the Internet domain.
+    Examples:
+    struct sockaddr_in
+    INADDR_ANY
+    IPPROTO_TCP, IPPROTO_UDP
+    AF_INET, AF_INET6
+    - This is included when you need to define socket address structures.
+
+    <arpa/inet.h>
+    Declares functions for manipulating IP addresses in text/binary form.
+    Examples:
+    inet_pton() -> Convert text to binary IP
+    inet_ntop() -> Convert binary IP to text
+    inet_addr() (legacy)
+    - This is included when you need to convert or format IP addresses which is not needed in our case
+
+```
+##### GUI (Server):
+...  
+...  
+...  
+TBD  
+...  
+...  
+
+##### GUI (Client):
+...  
+...  
+...  
+TBD  
+...  
+...  
+
+
 
 ## Support & Resources
 Hands-On System Programming with C++: [Packtpulishing.com](https://www.packtpub.com/en-US/product/hands-on-system-programming-with-c-9781789131772)  
